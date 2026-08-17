@@ -1,0 +1,17 @@
+{
+  "name": "ts-grm-0.0.2-resolve-cycle-repro",
+  "version": "1.0.0",
+  "description": "复现 ts-grm 0.0.2 的解析环缺陷（基类 m2o.self 指向子类）",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@ts-grm/core": "^0.0.2"
+  }
+}

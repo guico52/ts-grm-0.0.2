@@ -2,13 +2,13 @@
 
 复现 ts-grm 0.0.2（npm 官方包）的模型解析缺陷：
 
-- **场景**：基类 `Base` 声明 `createdBy = prop.m2o.self(() => Child)`（基类关联指向**子类**），
+- **场景**：基类 `Base` 声明 `createdBy = prop.m2o(Child)`（基类关联指向**子类**），
   `Child extends Base`。
 - **预期**：子类模型应正常解析——Jimmer 中"基类（映射超类）声明关联"是被支持的设计。
 - **实际**：解析 `Child` 时，先解析祖先 `Base`，`Base.createdBy` 的 target `Child`
   又触发对 `Child` 的递归解析（**正在解析中的实体被重入**，ts-grm 无重入保护），
   抛 `The declaredPropMap of Base is not initialized`。
-- **对照**：同模型自引用（`parent = prop.m2o.self(() => Node)`）可以正常解析——
+- **对照**：同模型自引用（`parent = prop.m2o(Node)`）可以正常解析——
   缺陷只出现在"基类 → 子类"方向。
 
 ## 运行
@@ -25,7 +25,7 @@ npm test
 ```ts
 const Base = model("Base", "id", class {
     id = prop.str(36)
-    createdBy = prop.m2o.self(() => Child).nullable()   // 基类 → 子类
+    createdBy = prop.m2o(Child).nullable()   // 基类 → 子类
 }, ctx => ctx.table({ discriminator: "TYPE", discriminatorValue: "Base" }));
 
 const Child = model.extends(Base)("Child", class {
